@@ -1,9 +1,9 @@
 {
   "domain": "akahu",
-  "name": "Akahu NZ",
-  "documentation": "URL_TO_YOUR_GITHUB_REPO",
-  "issue_tracker": "URL_TO_YOUR_GITHUB_REPO/issues",
-  "codeowners": ["@your_github_username"],
+  "name": "Akahu NZ Integration",
+  "documentation": "https://github.com/mwinterstorm/ha_akahu/tree/main/custom_components/akahu",
+  "issue_tracker": "https://github.com/mwinterstorm/ha_akahu/tree/main/custom_components/akahu/issues",
+  "codeowners": ["@mwinterstorm"],
   "config_flow": true,
   "iot_class": "cloud_polling",
   "version": "1.0.0"
