@@ -1,0 +1,18 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect to Akahu",
+        "description": "Enter your Akahu App Token and User Token.",
+        "data": {
+          "app_token": "App Token",
+          "token": "User Token"
+        }
+      }
+    },
+    "error": {
+      "auth": "Invalid credentials. Please check your App Token and User Token and try again.",
+      "unknown": "An unknown error occurred. Please try again."
+    }
+  }
+}

@@ -1,0 +1,25 @@
+# akahu/services.yaml
+transfer:
+  name: Transfer
+  description: "Initiate a transfer between two of your Akahu-connected bank accounts."
+  fields:
+    from_account:
+      name: "From Account"
+      description: "The account ID to transfer from."
+      required: true
+      selector:
+        text:
+    to_account:
+      name: "To Account"
+      description: "The account ID to transfer to."
+      required: true
+      selector:
+        text:
+    amount:
+      name: "Amount"
+      description: "The amount to transfer (in dollars)."
+      required: true
+      selector:
+        number:
+          min: 0.01
+          step: 0.01
