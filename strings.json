@@ -14,5 +14,25 @@
       "auth": "Invalid credentials. Please check your App Token and User Token and try again.",
       "unknown": "An unknown error occurred. Please try again."
     }
+  },
+  "services": {
+    "transfer": {
+      "name": "Transfer",
+      "description": "Initiates a transfer between two of your connected bank accounts.",
+      "fields": {
+        "from_account": {
+          "name": "From Account",
+          "description": "The account ID to transfer funds from."
+        },
+        "to_account": {
+          "name": "To Account",
+          "description": "The account ID to transfer funds to."
+        },
+        "amount": {
+          "name": "Amount",
+          "description": "The amount to transfer."
+        }
+      }
+    }
   }
 }
