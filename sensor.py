@@ -1,3 +1,4 @@
+# akahu/sensor.py
 """Sensor platform for Akahu."""
 import asyncio
 from datetime import timedelta
@@ -14,7 +15,6 @@ from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, Upda
 from .const import DOMAIN, API_HOST
 
 _LOGGER = logging.getLogger(__name__)
-SCAN_INTERVAL = timedelta(minutes=15)
 
 async def async_setup_entry(
     hass: HomeAssistant,
@@ -27,6 +27,9 @@ async def async_setup_entry(
         "Authorization": f"Bearer {entry.data[CONF_TOKEN]}",
         "X-Akahu-ID": entry.data["app_token"],
     }
+    
+    # Get the scan interval from the options flow, or default to 15 minutes.
+    scan_interval = timedelta(minutes=entry.options.get("scan_interval", 15))
 
     async def async_update_data():
         """Fetch data from Akahu API."""
@@ -45,8 +48,11 @@ async def async_setup_entry(
         _LOGGER,
         name="akahu_sensor",
         update_method=async_update_data,
-        update_interval=SCAN_INTERVAL,
+        update_interval=scan_interval, 
     )
+    
+    hass.data.setdefault(DOMAIN, {})
+    hass.data[DOMAIN][entry.entry_id] = coordinator
 
     # Fetch initial data so we have it when we create entities
     await coordinator.async_config_entry_first_refresh()
@@ -63,11 +69,11 @@ class AkahuAccountSensor(SensorEntity):
         """Initialize the sensor."""
         self.coordinator = coordinator
         self._account_id = account_id
-        
+
         # Initial data from the coordinator
         account_data = self.coordinator.data[self._account_id]
         connection_name = account_data.get("connection", {}).get("name", "Unknown")
-        
+
         self._attr_name = f"{connection_name} {account_data['name']}"
         self._attr_unique_id = self._account_id
         self._attr_icon = "mdi:bank"
@@ -96,7 +102,7 @@ class AkahuAccountSensor(SensorEntity):
             "status": account_data.get("status"),
             "formatted_account_number": account_data.get("formatted_account"),
         }
-        
+
     async def async_added_to_hass(self) -> None:
         """When entity is added to hass."""
         self.async_on_remove(

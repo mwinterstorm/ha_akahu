@@ -1,3 +1,4 @@
+# akahu/config_flow.py
 import asyncio
 from typing import Any, Dict, Optional
 
@@ -7,16 +8,23 @@ from async_timeout import timeout
 
 from homeassistant import config_entries
 from homeassistant.const import CONF_TOKEN
-from homeassistant.core import HomeAssistant
+from homeassistant.core import HomeAssistant, callback 
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from .const import DOMAIN, API_HOST
+from .options_flow import AkahuOptionsFlowHandler 
 
 CONF_APP_TOKEN = "app_token"
 
 class AkahuConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     """Handle a config flow for Akahu."""
     VERSION = 1
+
+    @staticmethod
+    @callback
+    def async_get_options_flow(config_entry):
+        """Get the options flow for this handler."""
+        return AkahuOptionsFlowHandler(config_entry)
 
     async def async_step_user(self, user_input: Optional[Dict[str, Any]] = None):
         """Handle the initial step."""
@@ -37,7 +45,6 @@ class AkahuConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             try:
                 async with timeout(15):
                     async with session.get(f"{API_HOST}/me", headers=headers) as resp:
-                        # Explicit handling is nicer than generic raise_for_status
                         if resp.status == 200:
                             return self.async_create_entry(title="Akahu", data=user_input)
                         if resp.status in (401, 403):
